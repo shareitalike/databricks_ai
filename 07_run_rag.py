@@ -1,9 +1,9 @@
 # Databricks Notebook Execution Script - Basic RAG
 # Use this script to ask an LLM questions about your private documents!
 
-# IMPORTANT: We need the LangChain core library for our prompts.
+# IMPORTANT: We need the LangChain core library for our prompts and Vector Search.
 # Run this %pip command in the very first cell of your notebook:
-# %pip install langchain-core
+# %pip install langchain-core databricks-vectorsearch
 
 import sys
 import os
