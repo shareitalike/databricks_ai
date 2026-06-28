@@ -38,8 +38,8 @@ class ShopSphereAgent:
     The orchestrator that decides whether to chat or use tools.
     """
     def __init__(self):
-        # We must use a model that supports tool calling (e.g., Llama 3.1)
-        self.llm = ChatDatabricks(endpoint="databricks-meta-llama-3-1-70b-instruct", max_tokens=1000)
+        # We must use a model that supports tool calling. DBRX is Databricks' flagship model and always available!
+        self.llm = ChatDatabricks(endpoint="databricks-dbrx-instruct", max_tokens=1000)
         self.tools = [document_retriever]
         
         self.prompt = ChatPromptTemplate.from_messages([
