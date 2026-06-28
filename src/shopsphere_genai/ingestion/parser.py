@@ -57,7 +57,7 @@ class DocumentParser:
         self.config = config
         self.bronze_table = f"{self.config.catalog_name}.{self.config.schema_name}.bronze_raw_documents"
         self.silver_table = f"{self.config.catalog_name}.{self.config.schema_name}.silver_cleaned_documents"
-        self.checkpoint_path = f"/Volumes/{self.config.catalog_name}/{self.config.schema_name}/checkpoints/silver_parsing"
+        self.checkpoint_path = f"/Volumes/{self.config.catalog_name}/{self.config.schema_name}/{self.config.volume_name}/_checkpoints/silver_parsing"
 
     def process_new_documents(self):
         """
