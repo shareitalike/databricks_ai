@@ -3,7 +3,7 @@
 
 # IMPORTANT: We need the LangChain core library for our prompts.
 # Run this %pip command in the very first cell of your notebook:
-# %pip install langchain
+# %pip install langchain-core
 
 import sys
 import os

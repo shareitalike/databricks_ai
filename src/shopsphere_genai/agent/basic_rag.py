@@ -1,5 +1,5 @@
 import mlflow.deployments
-from langchain.prompts import PromptTemplate
+from langchain_core.prompts import PromptTemplate
 from shopsphere_genai.config.core import ShopSphereGenAIConfig
 from shopsphere_genai.search.retriever import ShopSphereRetriever
 
