@@ -3,7 +3,7 @@
 
 # IMPORTANT: We need the LangChain Databricks library to connect to Databricks LLMs.
 # Run this %pip command in the very first cell of your notebook:
-# %pip install langchain databricks-langchain
+# %pip install langchain langchain-databricks
 
 import sys
 import os
