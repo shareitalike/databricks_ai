@@ -1,7 +1,7 @@
 from langchain.agents import create_tool_calling_agent, AgentExecutor
-from langchain_community.chat_models import ChatDatabricks
-from langchain.prompts import ChatPromptTemplate
-from langchain.tools import tool
+from langchain_databricks import ChatDatabricks
+from langchain_core.prompts import ChatPromptTemplate
+from langchain_core.tools import tool
 import sys
 import os
 
