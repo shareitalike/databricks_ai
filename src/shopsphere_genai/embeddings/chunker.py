@@ -54,10 +54,10 @@ class TextChunker:
         df_array = df.withColumn("chunks_array", chunk_text_udf(col("extracted_text")))
         
         # 2. Explode the array so each chunk is its own row
-        # We retain source_path and ingestion_timestamp for traceability
+        # We retain path and ingestion_timestamp for traceability
         df_exploded = (
             df_array
-            .select("source_path", "ingestion_timestamp", explode("chunks_array").alias("chunk_content"))
+            .select("path", "ingestion_timestamp", explode("chunks_array").alias("chunk_content"))
             .filter("chunk_content != ''")
         )
         
