@@ -45,9 +45,9 @@ class UCFunctionManager:
         Fetches the governed functions from UC and converts them to LangChain tools.
         """
         toolkit = UCFunctionToolkit(warehouse_id=warehouse_id)
-        tools = toolkit.get_tools(
-            function_names=[f"{self.catalog}.{self.schema}.check_inventory"]
-        )
+        tools = toolkit.get_tools([
+            f"{self.catalog}.{self.schema}.check_inventory"
+        ])
         return tools
 
 # Example Usage
