@@ -1,4 +1,4 @@
-from langchain_community.chat_models import ChatDatabricks
+from databricks_langchain import ChatDatabricks
 from langchain.prompts import PromptTemplate
 from shopsphere_genai.config.core import ShopSphereGenAIConfig
 from shopsphere_genai.search.retriever import ShopSphereRetriever

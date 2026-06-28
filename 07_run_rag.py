@@ -1,9 +1,9 @@
 # Databricks Notebook Execution Script - Basic RAG
 # Use this script to ask an LLM questions about your private documents!
 
-# IMPORTANT: We need the LangChain Community libraries to connect to Databricks LLMs.
+# IMPORTANT: We need the LangChain Databricks library to connect to Databricks LLMs.
 # Run this %pip command in the very first cell of your notebook:
-# %pip install langchain langchain-community
+# %pip install langchain databricks-langchain
 
 import sys
 import os
