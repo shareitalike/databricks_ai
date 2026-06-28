@@ -24,11 +24,20 @@ class ShopSphereRetriever:
         print(f"Executing Vector Search for query: '{query}'")
         
         try:
-            # Execute the similarity search
-            # Because the index was created with a specified embedding_model_endpoint,
-            # Databricks automatically vectorizes `query_text` for us.
+            # First, we must convert the natural language query into a vector!
+            # We use the Databricks native MLflow client to call the embedding endpoint.
+            import mlflow.deployments
+            deploy_client = mlflow.deployments.get_deploy_client("databricks")
+            
+            embedding_response = deploy_client.predict(
+                endpoint=self.config.embedding_model_endpoint,
+                inputs={"inputs": [query]}
+            )
+            query_vector = embedding_response["data"][0]["embedding"]
+            
+            # Execute the similarity search using the generated vector
             results = self.index.similarity_search(
-                query_text=query,
+                query_vector=query_vector,
                 columns=["chunk_content", "path"], # Request specific metadata back
                 num_results=top_k,
                 filters=filters # e.g., {"source_system": "Vendor_Portal"}
