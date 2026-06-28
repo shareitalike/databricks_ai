@@ -31,7 +31,7 @@ class ShopSphereRetriever:
             
             embedding_response = deploy_client.predict(
                 endpoint=self.config.embedding_model_endpoint,
-                inputs={"inputs": [query]}
+                inputs={"input": [query]}
             )
             query_vector = embedding_response["data"][0]["embedding"]
             
