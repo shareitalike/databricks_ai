@@ -14,7 +14,7 @@ class DocumentIngestor:
         # Define paths based on config
         self.volume_path = f"/Volumes/{self.config.catalog_name}/{self.config.schema_name}/{self.config.volume_name}"
         self.bronze_table_name = f"{self.config.catalog_name}.{self.config.schema_name}.bronze_raw_documents"
-        self.checkpoint_path = f"/Volumes/{self.config.catalog_name}/{self.config.schema_name}/checkpoints/bronze_ingestion"
+        self.checkpoint_path = f"/Volumes/{self.config.catalog_name}/{self.config.schema_name}/{self.config.volume_name}/_checkpoints/bronze_ingestion"
 
     def ingest_documents(self):
         """
