@@ -1,4 +1,4 @@
-from langchain_databricks import ChatDatabricks
+import mlflow.deployments
 from langchain.prompts import PromptTemplate
 from shopsphere_genai.config.core import ShopSphereGenAIConfig
 from shopsphere_genai.search.retriever import ShopSphereRetriever
@@ -6,18 +6,14 @@ from shopsphere_genai.search.retriever import ShopSphereRetriever
 class BasicRAGChain:
     """
     Orchestrates the Retrieval-Augmented Generation process.
-    Connects the custom Retriever to the Databricks LLM endpoint.
+    Connects the custom Retriever to the Databricks LLM endpoint natively via MLflow.
     """
     def __init__(self, config: ShopSphereGenAIConfig):
         self.config = config
         self.retriever = ShopSphereRetriever(config)
         
-        # Initialize the Databricks LLM (e.g., Llama 3 70B Instruct)
-        self.llm = ChatDatabricks(
-            endpoint=self.config.llm_endpoint,
-            max_tokens=500, # Guardrail: prevent infinite generation
-            temperature=0.1 # Low temperature for factual, deterministic answers
-        )
+        # We use Databricks native MLflow client to avoid LangChain package conflicts
+        self.deploy_client = mlflow.deployments.get_deploy_client("databricks")
         
         # Define the strict prompt template
         self.prompt_template = PromptTemplate.from_template(
@@ -58,11 +54,17 @@ class BasicRAGChain:
             question=query
         )
         
-        # 4. Invoke LLM
+        # 4. Invoke LLM via native MLflow
         print("Invoking LLM...")
-        # invoke() returns an AIMessage object. We extract the string content.
-        response_msg = self.llm.invoke(prompt)
-        answer = response_msg.content
+        response = self.deploy_client.predict(
+            endpoint=self.config.llm_endpoint,
+            inputs={
+                "messages": [{"role": "user", "content": prompt}],
+                "temperature": 0.1,
+                "max_tokens": 500
+            }
+        )
+        answer = response["choices"][0]["message"]["content"]
         
         # 5. Assemble Citations for Trust
         # We use a set comprehension to remove duplicate source paths
