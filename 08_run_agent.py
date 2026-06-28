@@ -3,7 +3,7 @@
 
 # IMPORTANT: We need the full LangChain ecosystem for Agents!
 # Run this %pip command in the very first cell of your notebook:
-# %pip install langchain langchain-core langchain-databricks databricks-vectorsearch
+# %pip install langchain langchain-core langchain-community langchain-databricks databricks-vectorsearch
 
 import sys
 import os
