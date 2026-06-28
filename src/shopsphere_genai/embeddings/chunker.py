@@ -2,7 +2,7 @@ import pandas as pd
 from pyspark.sql import SparkSession
 from pyspark.sql.functions import col, pandas_udf, explode
 from pyspark.sql.types import ArrayType, StringType
-from langchain.text_splitter import RecursiveCharacterTextSplitter
+from langchain_text_splitters import RecursiveCharacterTextSplitter
 from shopsphere_genai.config.core import ShopSphereGenAIConfig
 
 @pandas_udf(ArrayType(StringType()))
