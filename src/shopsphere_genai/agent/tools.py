@@ -1,6 +1,6 @@
 from pyspark.sql import SparkSession
 # In a real environment, you need the Databricks specific LangChain integrations
-# from langchain_community.tools.databricks import UCFunctionToolkit
+from langchain_databricks import UCFunctionToolkit
 
 class UCFunctionManager:
     """
@@ -44,17 +44,11 @@ class UCFunctionManager:
         """
         Fetches the governed functions from UC and converts them to LangChain tools.
         """
-        # Note: This code is commented out as it requires a live Databricks environment
-        # and the warehouse_id of a running SQL endpoint.
-        
-        # toolkit = UCFunctionToolkit(warehouse_id=warehouse_id)
-        # tools = toolkit.get_tools([
-        #     f"{self.catalog}.{self.schema}.check_inventory"
-        # ])
-        # return tools
-        
-        print("Mocking toolkit return for local execution.")
-        return []
+        toolkit = UCFunctionToolkit(warehouse_id=warehouse_id)
+        tools = toolkit.get_tools(
+            function_names=[f"{self.catalog}.{self.schema}.check_inventory"]
+        )
+        return tools
 
 # Example Usage
 # spark = SparkSession.builder.getOrCreate()
