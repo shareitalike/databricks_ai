@@ -1,7 +1,7 @@
 import os
 from langchain_community.agent_toolkits import create_sql_agent
 from langchain_community.utilities import SQLDatabase
-from langchain_community.chat_models import ChatDatabricks
+from langchain_databricks import ChatDatabricks
 from shopsphere_genai.config.core import ShopSphereGenAIConfig
 
 class ShopSphereSQLAgent:
@@ -12,8 +12,8 @@ class ShopSphereSQLAgent:
     def __init__(self, config: ShopSphereGenAIConfig):
         self.config = config
         
-        # Initialize the LLM (Must be a highly capable reasoning model like Llama 3 70B)
-        self.llm = ChatDatabricks(endpoint="databricks-meta-llama-3-70b-instruct", temperature=0)
+        # Initialize the LLM (Must be a highly capable reasoning model like Llama 3.3 70B)
+        self.llm = ChatDatabricks(endpoint="databricks-meta-llama-3-3-70b-instruct", temperature=0)
         
         # Databricks SQL Connection
         # In a real environment, you use a PAT or OAuth token belonging to a Service Principal
