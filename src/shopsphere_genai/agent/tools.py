@@ -1,6 +1,6 @@
 from pyspark.sql import SparkSession
 # In a real environment, you need the Databricks specific LangChain integrations
-from langchain_databricks import UCFunctionToolkit
+from langchain_community.tools.databricks import UCFunctionToolkit
 
 class UCFunctionManager:
     """
