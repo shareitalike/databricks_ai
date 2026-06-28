@@ -29,7 +29,7 @@ manager.register_inventory_tool()
 # E.g., if hostname is 'adb-123.45.azuredatabricks.net', your warehouse ID is in the HTTP Path or UI.
 # Alternatively, go to Compute -> SQL Warehouses -> click one -> URL contains /sql/warehouses/<id>
 
-WAREHOUSE_ID = "YOUR_WAREHOUSE_ID_HERE"
+WAREHOUSE_ID = "0882de12737c4773"
 
 print(f"\nFetching governed tools from Unity Catalog using Warehouse: {WAREHOUSE_ID}")
 try:
