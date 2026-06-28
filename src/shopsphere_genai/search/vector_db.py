@@ -46,9 +46,7 @@ class VectorDBManager:
                 pipeline_type="TRIGGERED", # Cost-effective for batch loads
                 primary_key="chunk_id",
                 embedding_dimension=1024, # Must match your embedding model (BGE-large is 1024)
-                embedding_vector_column="embedding_vector",
-                # We can sync extra columns for filtering during retrieval!
-                sync_source_metadata=True 
+                embedding_vector_column="embedding_vector"
             )
         else:
             print(f"Triggering sync for existing index: {self.index_name}")
