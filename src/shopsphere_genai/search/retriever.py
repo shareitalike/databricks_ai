@@ -29,7 +29,7 @@ class ShopSphereRetriever:
             # Databricks automatically vectorizes `query_text` for us.
             results = self.index.similarity_search(
                 query_text=query,
-                columns=["chunk_content", "source_path"], # Request specific metadata back
+                columns=["chunk_content", "path"], # Request specific metadata back
                 num_results=top_k,
                 filters=filters # e.g., {"source_system": "Vendor_Portal"}
             )
