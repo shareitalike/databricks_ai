@@ -22,7 +22,7 @@ class ShopSphereSQLAgent:
         token = os.getenv("DATABRICKS_TOKEN", "mock-token")
         
         # Create SQLAlchemy connection string
-        db_uri = f"databricks://token:{token}@{host}:443/{self.config.catalog_name}?http_path={http_path}&catalog={self.config.catalog_name}&schema={self.config.schema_name}"
+        db_uri = f"databricks://token:{token}@{host}:443/?http_path={http_path}&catalog={self.config.catalog_name}&schema={self.config.schema_name}"
         
         print("Connecting to Databricks SQL Warehouse...")
         try:
@@ -30,6 +30,7 @@ class ShopSphereSQLAgent:
             # This is a critical guardrail for both security and token cost.
             self.db = SQLDatabase.from_uri(
                 db_uri,
+                schema=self.config.schema_name,
                 include_tables=["sales_aggregated", "store_inventory"] 
             )
             
