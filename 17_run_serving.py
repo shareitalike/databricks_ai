@@ -15,8 +15,7 @@ except Exception as e:
 from databricks.sdk import WorkspaceClient
 from databricks.sdk.service.serving import (
     EndpointCoreConfigInput, 
-    ServedEntityInput,
-    AutoCaptureConfigInput
+    ServedEntityInput
 )
 from shopsphere_genai.config.core import ShopSphereGenAIConfig
 
@@ -41,18 +40,9 @@ served_entity = ServedEntityInput(
     scale_to_zero_enabled=True  # Auto-pause during idle periods to save cost
 )
 
-# 2. Enable Inference Tables: automatically log all requests & responses to Delta
-auto_capture = AutoCaptureConfigInput(
-    catalog_name=config.catalog_name,
-    schema_name="monitoring",
-    table_name_prefix="agent_logs",
-    enabled=True
-)
-
 endpoint_config = EndpointCoreConfigInput(
     name=ENDPOINT_NAME,
-    served_entities=[served_entity],
-    auto_capture_config=auto_capture
+    served_entities=[served_entity]
 )
 
 # 3. Create or update the endpoint (zero-downtime rolling update if it already exists)
