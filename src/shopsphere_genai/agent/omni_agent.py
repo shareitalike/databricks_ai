@@ -15,7 +15,7 @@ class ShopSphereOmniAgent:
         print(f"Successfully loaded {len(self.tools)} tools.")
         
         print("\nCreating Omni-Agent Execution Loop...")
-        system_prompt = """You are the ShopSphere Omni-Agent, a highly capable unified assistant for a retail company.
+        self.system_prompt = """You are the ShopSphere Omni-Agent, a highly capable unified assistant for a retail company.
 You have access to a set of specialized tools that allow you to answer different types of questions:
 
 1. unstructured search (employee_handbook_search): Use this for policies, guidelines, rules, and general text information.
@@ -28,8 +28,7 @@ Always provide a concise, friendly, and complete final answer to the user based 
         # In LangChain 0.3+, we use LangGraph for robust agent execution
         self.agent_executor = create_react_agent(
             model=self.llm, 
-            tools=self.tools, 
-            messages_modifier=system_prompt
+            tools=self.tools
         )
 
     def invoke(self, question: str) -> str:
@@ -38,8 +37,8 @@ Always provide a concise, friendly, and complete final answer to the user based 
         """
         print(f"\n--- Processing Request: '{question}' ---")
         try:
-            # LangGraph expects messages in state
-            result = self.agent_executor.invoke({"messages": [("user", question)]})
+            # LangGraph expects messages in state. We pass the system prompt here to avoid kwarg version conflicts!
+            result = self.agent_executor.invoke({"messages": [("system", self.system_prompt), ("user", question)]})
             # The final response is the content of the last message in the state
             return result["messages"][-1].content
         except Exception as e:
