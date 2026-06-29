@@ -1,5 +1,6 @@
 from databricks_langchain import ChatDatabricks
 from langgraph.prebuilt import create_react_agent
+from langgraph.checkpoint.memory import MemorySaver
 from shopsphere_genai.config.core import ShopSphereGenAIConfig
 from shopsphere_genai.agent.omni_tools import get_omni_tools
 
@@ -25,20 +26,31 @@ You have access to a set of specialized tools that allow you to answer different
 Analyze the user's request and decide which tool(s) to use. If a question requires multiple tools (e.g. "What is the return policy, and how many stores do we have?"), you can use multiple tools in sequence.
 Always provide a concise, friendly, and complete final answer to the user based on the results from the tools."""
         
+        # LangGraph Memory Checkpointer (Persists state across chat turns)
+        self.memory = MemorySaver()
+        
         # In LangChain 0.3+, we use LangGraph for robust agent execution
         self.agent_executor = create_react_agent(
             model=self.llm, 
-            tools=self.tools
+            tools=self.tools,
+            checkpointer=self.memory
         )
 
-    def invoke(self, question: str) -> str:
+    def invoke(self, question: str, thread_id: str = "default_thread") -> str:
         """
         Executes the Omni-Agent loop for a given question.
+        A thread_id is required for LangGraph memory to know which conversation to load.
         """
         print(f"\n--- Processing Request: '{question}' ---")
         try:
+            # We configure the thread ID for this specific run
+            config = {"configurable": {"thread_id": thread_id}}
+            
             # LangGraph expects messages in state. We pass the system prompt here to avoid kwarg version conflicts!
-            result = self.agent_executor.invoke({"messages": [("system", self.system_prompt), ("user", question)]})
+            result = self.agent_executor.invoke(
+                {"messages": [("system", self.system_prompt), ("user", question)]},
+                config=config
+            )
             # The final response is the content of the last message in the state
             return result["messages"][-1].content
         except Exception as e:
