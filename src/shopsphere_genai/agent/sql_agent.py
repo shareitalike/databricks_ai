@@ -1,7 +1,7 @@
 import os
 from langchain_community.agent_toolkits import create_sql_agent
 from langchain_community.utilities import SQLDatabase
-from langchain_databricks import ChatDatabricks
+from databricks_langchain import ChatDatabricks
 from shopsphere_genai.config.core import ShopSphereGenAIConfig
 
 class ShopSphereSQLAgent:

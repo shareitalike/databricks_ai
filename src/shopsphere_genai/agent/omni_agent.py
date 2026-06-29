@@ -1,4 +1,4 @@
-from langchain_databricks import ChatDatabricks
+from databricks_langchain import ChatDatabricks
 from langchain.agents import AgentExecutor, create_tool_calling_agent
 from langchain_core.prompts import ChatPromptTemplate
 from shopsphere_genai.config.core import ShopSphereGenAIConfig
