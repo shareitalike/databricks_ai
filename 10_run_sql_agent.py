@@ -41,14 +41,12 @@ except Exception as e:
 config = ShopSphereGenAIConfig.from_env("dev")
 
 print("Creating mock tables in Unity Catalog...")
-try:
-    spark.sql(f"CREATE TABLE IF NOT EXISTS {config.catalog_name}.{config.schema_name}.store_inventory (store_id INT, store_name STRING, espresso_machines_in_stock INT)")
-    spark.sql(f"INSERT INTO {config.catalog_name}.{config.schema_name}.store_inventory VALUES (1, 'NY Flagship', 5), (2, 'LA Downtown', 0), (3, 'Chicago Central', 12)")
-    
-    spark.sql(f"CREATE TABLE IF NOT EXISTS {config.catalog_name}.{config.schema_name}.sales_aggregated (store_id INT, month STRING, total_revenue DECIMAL(10,2))")
-    spark.sql(f"INSERT INTO {config.catalog_name}.{config.schema_name}.sales_aggregated VALUES (1, 'October', 15000.00), (2, 'October', 8500.50), (3, 'October', 22000.00)")
-except Exception as e:
-    print(f"Error creating tables (they might already exist with data): {e}")
+# Fail loudly if this doesn't work so we can see the exact Databricks error
+spark.sql(f"CREATE TABLE IF NOT EXISTS {config.catalog_name}.{config.schema_name}.store_inventory (store_id INT, store_name STRING, espresso_machines_in_stock INT)")
+spark.sql(f"INSERT INTO {config.catalog_name}.{config.schema_name}.store_inventory VALUES (1, 'NY Flagship', 5), (2, 'LA Downtown', 0), (3, 'Chicago Central', 12)")
+
+spark.sql(f"CREATE TABLE IF NOT EXISTS {config.catalog_name}.{config.schema_name}.sales_aggregated (store_id INT, month STRING, total_revenue DECIMAL(10,2))")
+spark.sql(f"INSERT INTO {config.catalog_name}.{config.schema_name}.sales_aggregated VALUES (1, 'October', 15000.00), (2, 'October', 8500.50), (3, 'October', 22000.00)")
 
 print("Initializing SQL Agent...")
 agent = ShopSphereSQLAgent(config)
