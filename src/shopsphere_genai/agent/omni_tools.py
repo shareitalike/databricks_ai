@@ -41,7 +41,7 @@ def get_omni_tools(config: ShopSphereGenAIConfig):
         if http_path:
             warehouse_id = http_path.split("/")[-1]
             toolkit = UCFunctionToolkit(warehouse_id=warehouse_id)
-            uc_tools = toolkit.get_tools()
+            uc_tools = toolkit.tools
             
             # We want to specifically filter to our governed genai_core functions if possible
             # Or just include all for now.

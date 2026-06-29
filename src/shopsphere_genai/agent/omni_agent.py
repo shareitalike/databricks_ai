@@ -29,7 +29,7 @@ Always provide a concise, friendly, and complete final answer to the user based 
         self.agent_executor = create_react_agent(
             model=self.llm, 
             tools=self.tools, 
-            state_modifier=system_prompt
+            messages_modifier=system_prompt
         )
 
     def invoke(self, question: str) -> str:
