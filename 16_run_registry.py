@@ -43,9 +43,12 @@ signature = infer_signature(example_input, example_output)
 
 with mlflow.start_run(run_name="Agent_Registration_v1") as run:
     # 1. Log the LangChain agent to MLflow Tracking
-    print("Step 1: Logging agent artifact to MLflow Tracking Server...")
+    print("Step 1: Logging agent artifact to MLflow Tracking Server using Models-from-Code...")
+    
+    entrypoint_path = os.path.join(os.path.dirname(__file__) if '__file__' in locals() else os.getcwd(), "src", "shopsphere_genai", "agent", "mlflow_entrypoint.py")
+    
     model_info = mlflow.langchain.log_model(
-        lc_model=omni_agent.agent_executor,
+        lc_model=entrypoint_path,
         artifact_path="shopsphere_agent",
         signature=signature,
         input_example=example_input,
