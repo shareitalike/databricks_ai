@@ -72,7 +72,6 @@ with mlflow.start_run(run_name="LLM_Judge_Run_v3"):
         data=eval_data,
         predictions="predictions",
         targets="ground_truth",
-        model_type="question-answering",
         extra_metrics=[correctness_metric, relevance_metric]
     )
 
