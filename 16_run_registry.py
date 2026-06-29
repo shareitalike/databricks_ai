@@ -45,24 +45,39 @@ with mlflow.start_run(run_name="Agent_Registration_v1") as run:
     # 1. Log the LangChain agent to MLflow Tracking
     print("Step 1: Logging agent artifact to MLflow Tracking Server using Models-from-Code...")
     
-    entrypoint_path = os.path.join(os.path.dirname(__file__) if '__file__' in locals() else os.getcwd(), "src", "shopsphere_genai", "agent", "mlflow_entrypoint.py")
+    # Use explicit absolute path for Databricks Notebook environment
+    entrypoint_path = "/Workspace/Users/alvigeorge3@gmail.com/databricks_ai/src/shopsphere_genai/agent/mlflow_entrypoint.py"
     
     model_info = mlflow.langchain.log_model(
         lc_model=entrypoint_path,
         artifact_path="shopsphere_agent",
         signature=signature,
         input_example=example_input,
+        pip_requirements=[
+            "langchain==0.3.13",
+            "langchain-core==0.3.28",
+            "langgraph==0.2.60",
+            "langchain-community==0.3.13",
+            "databricks-langchain",
+            "databricks-sql-connector",
+            "pydantic"
+        ]
     )
-    print(f"  ✅ Artifact URI: {model_info.model_uri}")
+    print(f"🔗 View Logged Model at: {model_info.model_uri}")
 
-    # 2. Register the artifact in Unity Catalog Model Registry
-    print(f"\nStep 2: Registering in Unity Catalog as '{UC_MODEL_NAME}'...")
+    # 2. Register the logged model into Unity Catalog!
+    print("\nStep 2: Registering model to Unity Catalog...")
     registered_model = mlflow.register_model(
         model_uri=model_info.model_uri,
-        name=UC_MODEL_NAME
+        name=UC_MODEL_NAME,
+        await_registration_for=300
     )
-    print(f"  ✅ Registered as Version: {registered_model.version}")
+    
+    print(f"✅ Model registered successfully as Version {registered_model.version}!")
 
-print(f"\n✅ Registration Complete!")
-print(f"   Go to Catalog -> {config.catalog_name} -> {config.schema_name} -> Models")
-print(f"   to see 'shopsphere_copilot' v{registered_model.version} in Unity Catalog!")
+print("\n-------------------------------------------------------")
+print("🎉 OMNI-AGENT IS NOW IN UNITY CATALOG!")
+print("It is officially tracked, versioned, and governed.")
+print(f"Go to Catalog -> {config.catalog_name} -> {config.schema_name} -> shopsphere_copilot to see it.")
+print("Next, we will deploy it to a live Serverless Endpoint!")
+print("-------------------------------------------------------")
