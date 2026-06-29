@@ -73,8 +73,7 @@ with mlflow.start_run(run_name="LLM_Judge_Run_v3"):
         predictions="predictions",
         targets="ground_truth",
         model_type="question-answering",
-        extra_metrics=[correctness_metric, relevance_metric],
-        evaluators="default"
+        extra_metrics=[correctness_metric, relevance_metric]
     )
 
 print("\n✅ Judge Evaluation Complete!")
