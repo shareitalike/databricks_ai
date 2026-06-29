@@ -3,7 +3,7 @@
 
 # IMPORTANT: You need the Databricks SQL Connector and LangChain SQL packages!
 # Run this %pip command in the very first cell of your notebook:
-# %pip install databricks-sql-connector langchain-community langchain-databricks
+# %pip install databricks-sql-connector databricks-sqlalchemy langchain-community langchain-databricks
 
 import sys
 import os
