@@ -60,30 +60,27 @@ print("⚖️ RUNNING LLM-AS-A-JUDGE EVALUATION")
 print("   Judge Model: Llama 3.3 70B Instruct")
 print("=======================================================\n")
 
-# The magic: We pass our pre-generated predictions to mlflow.evaluate()
+# The magic: We pass our pre-generated predictions to mlflow.genai.evaluate()
 # and configure it to use an LLM as the judge for semantic scoring.
-with mlflow.start_run(run_name="LLM_Judge_Run_v1"):
-    results = mlflow.evaluate(
+with mlflow.start_run(run_name="LLM_Judge_Run_v2"):
+    results = mlflow.genai.evaluate(
         data=eval_data,
         predictions="predictions",
         targets="ground_truth",
-        model_type="question-answering",
-        evaluators="default",
-        evaluator_config={
-            "default": {
-                "col_mapping": {
-                    "inputs": "inputs",
-                    "context": "context"
-                }
-            }
-        }
+        evaluators=[
+            mlflow.genai.Correctness(),
+            mlflow.genai.RelevanceToQuery()
+        ]
     )
 
 print("\n✅ Judge Evaluation Complete!")
 print("\nAggregate Metrics:")
-for metric, value in results.metrics.items():
-    print(f"  - {metric}: {round(value, 4) if isinstance(value, float) else value}")
+if hasattr(results, 'metrics') and results.metrics:
+    for metric, value in results.metrics.items():
+        print(f"  - {metric}: {round(value, 4) if isinstance(value, float) else value}")
 
 print("\nPer-Question Results (sample):")
-print(results.tables["eval_results_table"].to_string())
+if hasattr(results, 'tables') and "eval_results_table" in results.tables:
+    print(results.tables["eval_results_table"].to_string())
+    
 print("\nGo to Experiments -> LLM_Judge_Evaluations in the Databricks UI for the full visual report!")
