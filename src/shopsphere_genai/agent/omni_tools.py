@@ -13,9 +13,14 @@ def get_omni_tools(config: ShopSphereGenAIConfig):
     print("Loading RAG Sub-system...")
     try:
         retriever = ShopSphereRetriever(config)
+        
+        def search_handbook(query: str) -> str:
+            docs = retriever.retrieve_context(query)
+            return retriever.format_for_llm(docs)
+            
         rag_tool = Tool(
             name="employee_handbook_search",
-            func=retriever.retrieve_answers,
+            func=search_handbook,
             description="Use this tool to search the employee handbook, retail guidelines, and corporate documents for store policies, return policies, onboarding, or general textual information. Input should be the user's question."
         )
         tools.append(rag_tool)

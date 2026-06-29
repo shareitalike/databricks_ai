@@ -17,7 +17,7 @@ class ShopSphereSQLAgent:
         
         # Databricks SQL Connection
         # In a real environment, you use a PAT or OAuth token belonging to a Service Principal
-        host = os.getenv("DATABRICKS_HOST", "your-workspace.cloud.databricks.com")
+        host = os.getenv("DATABRICKS_HOST", "your-workspace.cloud.databricks.com").replace("https://", "")
         http_path = os.getenv("DATABRICKS_SQL_HTTP_PATH", "/sql/1.0/warehouses/your-warehouse-id")
         token = os.getenv("DATABRICKS_TOKEN", "mock-token")
         

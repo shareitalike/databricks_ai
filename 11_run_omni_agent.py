@@ -24,7 +24,7 @@ os.environ["DATABRICKS_SQL_HTTP_PATH"] = "/sql/1.0/warehouses/0882de12737c4773"
 try:
     context = dbutils.notebook.entry_point.getDbutils().notebook().getContext()
     token = context.apiToken().get()
-    host = context.apiUrl().get().replace("https://", "")
+    host = context.apiUrl().get()
     os.environ["DATABRICKS_TOKEN"] = token
     os.environ["DATABRICKS_HOST"] = host
 except Exception as e:
