@@ -21,16 +21,19 @@ class ShopSphereSQLAgent:
         http_path = os.getenv("DATABRICKS_SQL_HTTP_PATH", "/sql/1.0/warehouses/your-warehouse-id")
         token = os.getenv("DATABRICKS_TOKEN", "mock-token")
         
-        # Create SQLAlchemy connection string
-        db_uri = f"databricks://token:{token}@{host}:443/?http_path={http_path}&catalog={self.config.catalog_name}&schema={self.config.schema_name}"
+        # Extract warehouse ID from the HTTP path
+        warehouse_id = http_path.split("/")[-1]
         
         print("Connecting to Databricks SQL Warehouse...")
         try:
             # We explicitly INCLUDE only the tables the agent is allowed to see.
-            # This is a critical guardrail for both security and token cost.
-            self.db = SQLDatabase.from_uri(
-                db_uri,
+            # Using from_databricks is the recommended and most robust method.
+            self.db = SQLDatabase.from_databricks(
+                catalog=self.config.catalog_name,
                 schema=self.config.schema_name,
+                host=host,
+                api_token=token,
+                warehouse_id=warehouse_id,
                 include_tables=["sales_aggregated", "store_inventory"] 
             )
             
