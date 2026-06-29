@@ -38,7 +38,7 @@ config = ShopSphereGenAIConfig.from_env("dev")
 
 # 5. STEP 1: Set up MLflow Tracing BEFORE creating the agent
 #    This is critical - autolog must be enabled before LangChain objects are instantiated
-tracer = ShopSphereTracer(config, "/Shared/ShopSphere/Agent_Traces")
+tracer = ShopSphereTracer(config, "/Users/alvigeorge3@gmail.com/Agent_Traces")
 tracer.setup_tracing()
 
 # 6. STEP 2: Now create the agent (it will be auto-instrumented)
