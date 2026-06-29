@@ -37,8 +37,19 @@ try:
 except Exception as e:
     print("Could not automatically retrieve Databricks credentials. Make sure you are running this inside a Databricks Notebook.")
 
-# 3. Initialize Config and Agent
+# 3. Initialize Config and Create Mock Tables
 config = ShopSphereGenAIConfig.from_env("dev")
+
+print("Creating mock tables in Unity Catalog...")
+try:
+    spark.sql(f"CREATE TABLE IF NOT EXISTS {config.catalog_name}.{config.schema_name}.store_inventory (store_id INT, store_name STRING, espresso_machines_in_stock INT)")
+    spark.sql(f"INSERT INTO {config.catalog_name}.{config.schema_name}.store_inventory VALUES (1, 'NY Flagship', 5), (2, 'LA Downtown', 0), (3, 'Chicago Central', 12)")
+    
+    spark.sql(f"CREATE TABLE IF NOT EXISTS {config.catalog_name}.{config.schema_name}.sales_aggregated (store_id INT, month STRING, total_revenue DECIMAL(10,2))")
+    spark.sql(f"INSERT INTO {config.catalog_name}.{config.schema_name}.sales_aggregated VALUES (1, 'October', 15000.00), (2, 'October', 8500.50), (3, 'October', 22000.00)")
+except Exception as e:
+    print(f"Error creating tables (they might already exist with data): {e}")
+
 print("Initializing SQL Agent...")
 agent = ShopSphereSQLAgent(config)
 
