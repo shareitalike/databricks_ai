@@ -21,12 +21,9 @@ class ShopSphereTracer:
         mlflow.set_experiment(self.experiment_name)
         
         # 2. Enable Autologging
-        # log_models=False because we don't want to save the heavy model artifact 
-        # on every single run, we just want the telemetry traces.
-        mlflow.langchain.autolog(
-            log_models=False, 
-            log_traces=True
-        )
+        # We call autolog with no arguments to use the safe, default tracing behavior
+        # across all recent MLflow versions.
+        mlflow.langchain.autolog()
         print("LangChain MLflow Tracing is ACTIVE.")
 
     def execute_with_custom_span(self, agent_function, user_input: str, user_id: str):
