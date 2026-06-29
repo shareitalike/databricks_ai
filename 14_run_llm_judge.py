@@ -15,6 +15,7 @@ os.environ["DATABRICKS_SQL_HTTP_PATH"] = "/sql/1.0/warehouses/0882de12737c4773"
 
 import mlflow
 import pandas as pd
+from mlflow.metrics.genai import answer_correctness, answer_relevance
 from shopsphere_genai.config.core import ShopSphereGenAIConfig
 
 # -------------------------------------------------
@@ -60,17 +61,20 @@ print("⚖️ RUNNING LLM-AS-A-JUDGE EVALUATION")
 print("   Judge Model: Llama 3.3 70B Instruct")
 print("=======================================================\n")
 
-# The magic: We pass our pre-generated predictions to mlflow.genai.evaluate()
+# Define the judge models
+correctness_metric = answer_correctness(model="endpoints:/databricks-meta-llama-3-3-70b-instruct")
+relevance_metric = answer_relevance(model="endpoints:/databricks-meta-llama-3-3-70b-instruct")
+
+# The magic: We pass our pre-generated predictions to mlflow.evaluate()
 # and configure it to use an LLM as the judge for semantic scoring.
-with mlflow.start_run(run_name="LLM_Judge_Run_v2"):
-    results = mlflow.genai.evaluate(
+with mlflow.start_run(run_name="LLM_Judge_Run_v3"):
+    results = mlflow.evaluate(
         data=eval_data,
         predictions="predictions",
         targets="ground_truth",
-        evaluators=[
-            mlflow.genai.Correctness(),
-            mlflow.genai.RelevanceToQuery()
-        ]
+        model_type="question-answering",
+        extra_metrics=[correctness_metric, relevance_metric],
+        evaluators="default"
     )
 
 print("\n✅ Judge Evaluation Complete!")
