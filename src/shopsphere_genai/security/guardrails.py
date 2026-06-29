@@ -1,4 +1,4 @@
-from langchain_community.chat_models import ChatDatabricks
+from databricks_langchain import ChatDatabricks
 from langchain_core.messages import HumanMessage
 from shopsphere_genai.config.core import ShopSphereGenAIConfig
 
@@ -11,21 +11,12 @@ class SecurityGuardrail:
         self.config = config
         
         # We use a distinct endpoint for the guardrail. 
-        # Note: Databricks Foundation Model APIs provide a specialized 
-        # databricks-llama-guard model for this exact purpose.
-        # If unavailable, you can use a smaller instruct model heavily prompted.
-        try:
-            self.guard_model = ChatDatabricks(
-                endpoint="databricks-llama-guard", 
-                max_tokens=20, # It only needs to output "safe" or "unsafe"
-                temperature=0.0
-            )
-        except Exception:
-            # Fallback to standard model for demonstration if llama-guard isn't active
-            self.guard_model = ChatDatabricks(
-                endpoint=self.config.llm_endpoint, 
-                temperature=0.0
-            )
+        # Since databricks-llama-guard is missing, we use the powerful 70B model as the guard.
+        self.guard_model = ChatDatabricks(
+            endpoint="databricks-meta-llama-3-3-70b-instruct", 
+            max_tokens=20, # It only needs to output "safe" or "unsafe"
+            temperature=0.0
+        )
 
     def check_input_safety(self, user_input: str) -> bool:
         """
