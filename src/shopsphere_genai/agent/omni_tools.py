@@ -41,15 +41,17 @@ def get_omni_tools(config: ShopSphereGenAIConfig):
         
     print("Loading Unity Catalog Governed Tools...")
     try:
-        from databricks_langchain.uc_ai import UCFunctionToolkit
+        from langchain_community.tools.databricks import UCFunctionToolkit
         http_path = os.getenv("DATABRICKS_SQL_HTTP_PATH")
         if http_path:
             warehouse_id = http_path.split("/")[-1]
             toolkit = UCFunctionToolkit(warehouse_id=warehouse_id)
-            uc_tools = toolkit.tools
             
-            # We want to specifically filter to our governed genai_core functions if possible
-            # Or just include all for now.
+            # Explicitly include our governed inventory check tool
+            tool_name = f"{config.catalog_name}.{config.schema_name}.check_inventory"
+            toolkit = toolkit.include(tool_name)
+            
+            uc_tools = toolkit.get_tools()
             tools.extend(uc_tools)
         else:
             print("[WARN] DATABRICKS_SQL_HTTP_PATH not set. Skipping UC Tools.")
