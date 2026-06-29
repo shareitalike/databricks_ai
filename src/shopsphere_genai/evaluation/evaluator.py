@@ -43,8 +43,7 @@ class Benchmarker:
             results = mlflow.evaluate(
                 model=agent_function,
                 data=eval_data,
-                model_type="question-answering",
-                evaluators="default"
+                model_type="question-answering"
             )
             
             print("\n--- Evaluation Complete ---")
@@ -56,10 +55,10 @@ class Benchmarker:
 
 # Example Usage:
 # # 1. Define a wrapper function for your agent
-# def my_agent_wrapper(inputs):
+# def my_agent_wrapper(df: pd.DataFrame) -> pd.DataFrame:
 #     """
-#     MLflow passes a Pandas Series of inputs or a single input depending on batching.
-#     This simple wrapper assumes single string input.
+#     MLflow 3.0+ (mlflow.evaluate) passes a Pandas DataFrame of inputs.
+#     The agent function must return a Pandas DataFrame or Series containing predictions.
 #     """
 #     # Assuming 'agent' is your instantiated ShopSphereAgent from Lesson 9
 #     # return agent.chat(inputs)
