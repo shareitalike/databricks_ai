@@ -1,5 +1,5 @@
 import os
-from langchain.tools import Tool
+from langchain_core.tools import Tool
 from shopsphere_genai.config.core import ShopSphereGenAIConfig
 from shopsphere_genai.search.retriever import ShopSphereRetriever
 from shopsphere_genai.agent.sql_agent import ShopSphereSQLAgent
